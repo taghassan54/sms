@@ -19,7 +19,7 @@ class SmsFetcherPage extends GetView<SmsFetcherLogic> {
                   backgroundColor: Colors.white,
                   elevation: 0,
                   title:  Text("SMS Fetcher ${controller.extractMoneyAmount("Your Salik account 35585978 has been topped up using Salik recharge card. The new balance is 52.00 AED. Thank You.")}",
-                      style: TextStyle(color: Colors.black45)),
+                      style: const TextStyle(color: Colors.black45)),
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(50.0),
                     child: Container(
@@ -58,7 +58,7 @@ class SmsFetcherPage extends GetView<SmsFetcherLogic> {
                                 "${controller.transactionalMessages[index].body}"),
                             const Divider(),
                             Text(
-                                "${controller.extractMoneyAmount('${controller.transactionalMessages[index].body}') }"),
+                                "${controller.extractMoneyAmount('${controller.transactionalMessages[index].body}')} AED"),
                           ],
                         ),
                       ),
