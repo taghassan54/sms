@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.READ_SMS"/>
 
     <application
-        android:label="sms"
+        android:label="taj Elden SMS Task"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

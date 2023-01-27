@@ -11,8 +11,8 @@ class SmsPermissionRequestWidget extends StatelessWidget {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Lottie.network(
-              'https://assets8.lottiefiles.com/private_files/lf30_z9ngb6sp.json',width: 150),
+          Lottie.asset(
+              'assets/lottiefiles/loading-loop.json',width: 150),
           const Text("this action required SMS access permission please make sure to accept this permission !"),
         ],
       ),
