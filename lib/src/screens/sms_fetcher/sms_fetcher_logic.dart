@@ -62,7 +62,7 @@ class SmsFetcherLogic extends GetxController with StateMixin<SmsFetcherState> {
     transactionalMessages = allMessages;
     Future.delayed(
       Duration.zero,
-          () => calculateTotalAmount(),
+      () => calculateTotalAmount(),
     );
     // allMessages.groupBy((event) => event.dateTime.toLocal().toIso8601String().substring(0,10));
     change(SMSLoadedSuccessfully(), status: RxStatus.success());
@@ -83,44 +83,48 @@ class SmsFetcherLogic extends GetxController with StateMixin<SmsFetcherState> {
     }
     Future.delayed(
       Duration.zero,
-          () => calculateTotalAmount(),
+      () => calculateTotalAmount(),
     );
     update();
   }
 
   String? extractMoneyAmount(String smsText) {
-    // // Define the regex pattern to match money amount
-    // final pattern =
-    //     RegExp(r'(AED\s)?([0-9]+(\.[0-9][0-9])?\sAED|\d+,\d+\.\d+|\d+\.\d+)\s');
-    //
-    // // Search for the first match of the pattern in the SMS text
-    // final match = pattern.firstMatch(smsText);
-    //
-    // // Extract the money amount from the matched text
-    //
-    // return match?.group(0);
-    // Define the regex pattern to match money amount in different formats
-    final pattern = RegExp(r'(AED\s)?([0-9]+(\.[0-9][0-9])?\sAED|\d+,\d+\.\d+|\d+\.\d+)\s|(AED|available\sbalance\sAED|Amount\sPaid\:\sAED)\s([0-9]+(\.[0-9][0-9])?|insufficient\sbalance)');
+    String message =
+        "Your Salik account 35585978 has been topped up using Salik recharge card. The new balance is 52.00 AED. Thank You.";
+
+    final pattern = RegExp(
+        r'(AED|available\sbalance\sAED|Amount\sPaid\:\sAED|\d+,\d+\.\d+|\d+\.\d+)\s([0-9]+(\.[0-9][0-9])?|0.0)');
 
     // Search for the first match of the pattern in the SMS text
     final match = pattern.firstMatch(smsText);
 
     // Extract the money amount from the matched text
-    return match?.group(2);
+    var amount = match?.group(2) ?? match?.group(0);
+
+    if (amount != null) {
+      return match?.group(2) ?? match?.group(0);
+    } else {
+      final pattern = RegExp(
+          r'(AED\s)?([0-9]+(\.[0-9][0-9])?\sAED|\d+,\d+\.\d+|\d+\.\d+)\s');
+      // Search for the first match of the pattern in the SMS text
+      final match = pattern.firstMatch(smsText);
+
+      return match?.group(2) ?? match?.group(0);
+    }
   }
 
   calculateTotalAmount() {
     // totalAmount = double.parse("${transactionalMessages.length}");
 
     totalAmount = transactionalMessages.map((item) {
-      if(extractMoneyAmount("${item.body}")?.replaceAll("AED", "")!=null) {
+      if (extractMoneyAmount("${item.body}")?.replaceAll("AED", "") != null) {
         return double.parse(
-          "${extractMoneyAmount("${item.body}")?.replaceAll("AED", "").replaceAll(",","")}");
-      }else{
+            "${extractMoneyAmount("${item.body}")?.replaceAll("AED", "").replaceAll(",", "")}");
+      } else {
         return 0.0;
       }
     }).sum;
-    totalAmount= double.parse(totalAmount.toStringAsFixed(2));
+    totalAmount = double.parse(totalAmount.toStringAsFixed(2));
     update();
   }
 }
